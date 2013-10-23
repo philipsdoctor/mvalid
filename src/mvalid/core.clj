@@ -15,6 +15,20 @@
  :second {:valid flase :message \"second must be greater than 4\"}}
 
  "
+ (defn composite-function
+  "A simple thrush"
+  [func-seq args]
+  ((apply comp (reverse func-seq)) args))
+
+(defn apply-fa [f a]
+  ;(f a)
+  (composite-function f a)
+  )
+
+(defn validate
+  [spec form]
+  (merge-with apply-fa spec form))
+
 (defn get-messages
   [reply]
   (if (not (:valid reply)) (:message reply) ""))
