@@ -36,26 +36,64 @@
            (.contains (error-string none-valid) "First must be valid." )
            (.contains (error-string none-valid) "Second must be valid." )
            (.contains (error-string none-valid) "Third must be valid." ))))))
+;not-nil?
+;(def test-dsl-1
+;  {:field1 [not-nil-or-empty?]
+;   :field2 [number?]
+;   :field3 [#(= 2 %)]})
 
-(def test-dsl-1
-  {:field1 [not-nil-or-empty?]
-   :field2 [not-nil? is-an-int?]
-   :field3 [#(= 2 %)]
-   })
+;(def test-data-1-valid
+;  {:field1 "Name"
+;   :field2 2
+;   :field3 2})
 
-(def test-data-1-valid
+;(def test-data-2-not-valid
+;  {:field1 "Name"
+;   :field2 2
+;   :field3 3})
+
+; no longer used
+;(deftest simple-test-1
+;  (testing "will apply merge function on match"
+;    (is (= {:a 2}
+;           (validate {:a [#(+ % 1)]} {:a 1})))))
+
+;(deftest simple-test-2
+;  (testing "will validate simple maps"
+;    (is (= true
+;         (is-valid? (validate test-dsl-1 test-data-1-valid))))
+;    (is (= false
+;         (is-valid? (validate test-dsl-1 test-data-2-not-valid))))))
+
+(def test-dsl-2
+  {:field1 {:funcs [not-nil-or-empty?] :message "The Field #1 is required!"}
+   :field2 {:funcs [number? #(= 2 %)] :message "This field must be an int!"}
+   :field3 {:funcs [#(= 2 %)] :message "You failed the robot check!"}})
+
+(def test-data-2-valid
   {:field1 "Name"
    :field2 2
-   :field3 2
-   })
+   :field3 2})
 
-(deftest simple-test-1
-  (testing "will apply merge function on match"
-    (is (= {:a 2}
-           (validate {:a [#(+ % 1)]} {:a 1})))))
+(def test-data-3-invalid
+  {:field1 "Name"
+   :field2 2
+   :field3 3})
 
+(deftest simple-test-2-valid-map
+  (testing "will validate simple maps, all values are true"
+    (is (= {:field1 {:valid true :message ""} :field2 {:valid true :message ""} :field3 {:valid true :message ""}}
+         (validate test-dsl-2 test-data-2-valid)))))
 
-(deftest simple-test-2
-  (testing "will validate simple maps"
+(deftest simple-test-2-valid-bool
+  (testing "will validate simple maps, all values are true"
     (is (= true
-         (is-valid? (validate test-dsl-1 test-data-1-valid))))))
+          (is-valid? (validate test-dsl-2 test-data-2-valid))))))
+
+(deftest simple-test-3-invalid-map
+  (testing "will validate simple maps, with some false"
+    (is (= {:field1 {:valid true :message ""}
+            :field2 {:valid true :message ""}
+            :field3 {:valid false :message "You failed the robot check!"}}
+         (validate test-dsl-2 test-data-3-invalid)))))
+

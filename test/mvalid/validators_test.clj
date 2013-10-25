@@ -2,8 +2,17 @@
   (:require [clojure.test :refer :all]
             [mvalid.validators :refer :all]))
 
-(deftest test-is-an-int?
-  (testing "It is an int should be true"
-    (is (= true (is-an-int? 2))))
-  (testing "When not an int, I should get false"
-    (is (= false (is-an-int? 2.2)))))
+(deftest test-not-nil?
+  (testing "It should be false for nil"
+    (is (= false (not-nil? nil)))
+  (testing "It should be true for not nil"
+    (is (= true (not-nil? "hello")))
+    (is (= true (not-nil? ""))))))
+
+(deftest test-not-nil-or-empty?
+  (testing "It should be false for nil"
+    (is (= false (not-nil-or-empty? nil)))
+  (testing "It should be true for not nil"
+    (is (= true (not-nil-or-empty? "hello"))))
+  (testing "It should be false for empty"
+    (is (= false (not-nil-or-empty? ""))))))
