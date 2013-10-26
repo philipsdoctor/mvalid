@@ -9,29 +9,29 @@ message maps or simple concatenated strings.
 
 ###Sample spec
 
-(def form-spec
-  {:first [[not-empty] "The First must not be empty!"]
-   :second [[#(> % 4)]] "Second must be greater than 4."]
-   :thrid  [[number? #(< % 10)] "Third must be a number and less than 10."]})
+> (def form-spec
+>   {:first [[not-empty] "The First must not be empty!"]
+>    :second [[#(> % 4)]] "Second must be greater than 4."]
+>    :thrid  [[number? #(< % 10)] "Third must be a number and less than 10."]})
 
 ###Sample data
 
-(def sample-data
-  {:first "first"
-   :second 2
-   :thrid 7})
+> (def sample-data
+>   {:first "first"
+>    :second 2
+>    :thrid 7})
 
 ###Sample Output
 
-(validate form-spec sample-data)
-
-{:first {:valid true :message ""}
- :second {:valid flase :message "second must be greater than 4"}
- :third {:valid true :message ""}}
-
-(is-valid? (validate form-spec sample-data))
-
-False
+> (validate form-spec sample-data)
+>
+> {:first {:valid true :message ""}
+>  :second {:valid flase :message "second must be greater than 4"}
+>  :third {:valid true :message ""}}
+>
+> (is-valid? (validate form-spec sample-data))
+>
+> False
 
 
 ## License
