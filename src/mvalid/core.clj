@@ -38,9 +38,9 @@
   "Applies the return format to the truth-func"
   [truth-func spec form]
   (let [valid (truth-func (:funcs spec) form)]
-    (if (not valid)
-      {:valid false :message (:message spec)}
-      {:valid true :message ""})))
+    (if valid
+      {:valid true :message ""}
+      {:valid false :message (:message spec)})))
 
 (defn validate
   "Validates that the map abides by the rules in the spec."
@@ -50,7 +50,7 @@
 (defn get-messages
   "Returns the error message if not valid."
   [reply]
-  (if (not (:valid reply)) (:message reply) ""))
+  (if (:valid reply) "" (:message reply)))
 
 (defn error-string
   "Returns a single string of all error messages joined."
